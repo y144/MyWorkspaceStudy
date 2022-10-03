@@ -1,13 +1,66 @@
 package com.yangtignjia.queue;
 
+import java.util.Scanner;
+
 /**
  * 杨廷甲
  * 2022-10-02
  */
 public class CircleArrayQueueDemo {
     public static void main(String[] args) {
+        //测试
+        System.out.println("测试数组模拟环形队列");
+        //1.初始化队列
+        CircleArray queue = new CircleArray(4); //设置说明，其队列的有效数据最大是3 因为我们在设计的时候，会预留一个位置作为约定
+        char key = ' ';
+        Scanner scanner = new Scanner(System.in);
+        boolean loop = true;
 
+
+        //输出一个菜单
+        while (loop) {
+            System.out.println("s(show) 显示队列");
+            System.out.println("e(exit) 退出程序");
+            System.out.println("a(add) 添加数据");
+            System.out.println("g(get) 从队列里面获取数据");
+            System.out.println("h(head) 查看队列头数据");
+            key = scanner.next().charAt(0);
+            switch (key) {
+                case 's' :
+                    queue.showQueue();
+                    break;
+                case 'a' :
+                    System.out.println("请输入一个数字");
+                    int a = scanner.nextInt();
+                    queue.addQueue(a);
+                    break;
+                case 'g' :
+                    try {
+                        int i = queue.getQueue();
+                        System.out.printf("获取到的数据为:%d\n",i);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 'h' :
+                    try {
+                        int head = queue.headqqQueue();
+                        System.out.printf("队列头的数据为：%d\n" ,head);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 'e' :
+                    scanner.close();
+                    loop = false;
+                    break;
+                default:
+                    break;
+            }
+        }
+        System.out.println("程序退出");
     }
+
 }
 
 class CircleArray {
@@ -63,4 +116,30 @@ class CircleArray {
         front = (front +1)%maxSize;
         return value;
     }
+
+    //显示队列的所有数据
+    public void showQueue() {
+        if (isEmpty()) {
+            System.out.println("队列为空，没有数据");
+        }
+        //这里要从front开始遍历 遍历有效个数据
+        for (int i = front; i < front +size(); i++) {
+            System.out.printf("arr[%d] = %d\n", i % maxSize, arr[i % maxSize]);
+        }
+    }
+
+    //获取队列中有效数据的个数
+    public int size() {
+        return (rare + maxSize - front) % maxSize;
+    }
+
+    //显示队列的头数据，不是取出数据
+    public int headqqQueue() {
+        if (isEmpty()) {
+            throw new RuntimeException("队列为空，没有数据");
+        }
+        return arr[front];
+    }
+
+
 }
