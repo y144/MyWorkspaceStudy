@@ -1,5 +1,7 @@
 package com.yangtignjia.linkedlist;
 
+import java.util.Stack;
+
 /**
  * 杨廷甲
  * 2022-10-03
@@ -14,14 +16,20 @@ public class SingleLinkedListDemo {
         HeroNode hero5 = new HeroNode(5, "张的撒", "大大大");
 
         SingleLinkedList singleLinkedList = new SingleLinkedList();
-        /*System.out.println("加入最后");
+        System.out.println("加入最后");
         singleLinkedList.add(hero1);
         singleLinkedList.add(hero2);
         singleLinkedList.add(hero3);
         singleLinkedList.add(hero4);
-        singleLinkedList.add(hero5);*/
+        singleLinkedList.add(hero5);
 
-        System.out.println("加入按照编号");
+        System.out.println("原来的链表");
+        singleLinkedList.list();
+
+        System.out.println("逆序打印");
+        reversePrint(singleLinkedList.getHead());
+
+        /*System.out.println("加入按照编号");
         singleLinkedList.addByOrder(hero1);
         singleLinkedList.addByOrder(hero4);
         singleLinkedList.addByOrder(hero3);
@@ -43,7 +51,60 @@ public class SingleLinkedListDemo {
 
         //测试获取倒数第K元素
         HeroNode lastIndexHeroNode = findLastIndexHeroNode(singleLinkedList.getHead(), 1);
-        System.out.println(lastIndexHeroNode);
+        System.out.println(lastIndexHeroNode);*/
+    }
+
+    /**
+     * 逆序打印单链表
+     * @param head
+     */
+    public static void reversePrint(HeroNode head) {
+        //链表为空不能打印
+        if (head.next == null) {
+            return;
+        }
+        //遍历链表将链表元素压入栈中
+        HeroNode cur = head.next; //遍历的当前节点
+        Stack<HeroNode> stack = new Stack<>();
+        while (cur != null) {
+            stack.push(cur);
+            cur = cur.next;
+        }
+        //遍历栈中元素打印
+        while (stack.size() > 0) {
+            System.out.println(stack.pop());
+        }
+    }
+
+    /**
+     * 反转单链表
+     * @param head 反转链表的头结点
+     * 思路分析：
+     *  1.先定义一个节点，reverseHead = new HeroNode()
+     *  2.遍历原来的链表，每遍历一个就将其取出，放在reverseHead的最前面
+     *  3.原来的链表head.next = reverseHead.next
+     */
+    public static void reverseList(HeroNode head) {
+        //如果链表为空或者链表只有一个节点就不需要反转直接返回
+        if (head.next == null || head.next.next == null) {
+            return;
+        }
+        //需要定义一个辅助变量来遍历链表
+        HeroNode cur = head.next;
+        //需要定义一个next ，指向当前节点cur的下一个节点
+        HeroNode next = null;
+        //定义一个reverseHead节点
+        HeroNode reverseHead = new HeroNode(0, "", "");
+
+        //循环遍历链表
+        while (cur != null) {
+            next = cur.next; //先暂时保存当前节点的下一个节点，因为后面需要使用
+            cur.next= reverseHead.next; //让当前节点的下一个节点指向新链表的最前端
+            reverseHead.next = cur; // 将cur连接到新的链表上
+            cur = next; //后移cur
+        }
+        head.next = reverseHead.next;
+
     }
 
     /**
